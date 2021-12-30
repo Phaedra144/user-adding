@@ -2,9 +2,15 @@ import './App.css';
 import AddUser from './components/AddUser';
 
 function App() {
+
+  const handleNewUser = (user) => {
+    let str = JSON.stringify(user);
+    console.log(str);
+  };
+
   return (
     <div>
-      <AddUser></AddUser>
+      <AddUser onAddUser={handleNewUser}></AddUser>
     </div>
   );
 }
