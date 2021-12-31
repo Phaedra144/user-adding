@@ -9,6 +9,7 @@ const UserList = (props) => {
             <ul>
                 {props.content.map((user) => (
                     <User
+                        key={user.id}
                         username={user.username}
                         age={user.age}
                     />
