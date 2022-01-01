@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import styles from './AddUser.module.css';
 import Button from '../UI/Button';
 import Card from '../UI/Card';
@@ -7,22 +7,18 @@ import Wrapper from "../Helpers/Wrapper";
 
 const AddUser = (props) => {
 
-    const [username, setUsername] = useState('');
-    const [age, setAge] = useState('');
+    const nameInputRef = useRef();
+    const ageInputRef = useRef();
+
     const [error, setError] = useState();
-
-    const usernameChangeHandler = event => {
-        setUsername(event.target.value);
-    };
-
-    const ageChangeHandler = event => {
-        setAge(event.target.value);
-    };
 
     const formSubmitHandler = event => {
         event.preventDefault();
 
-        if (username.trim().length === 0 || age.length === 0) {
+        const enteredName = nameInputRef.current.value;
+        const enteredAge = ageInputRef.current.value;
+
+        if (enteredName.length === 0 || enteredAge.length === 0) {
             setError({
                 title: 'Invalid input',
                 message: 'Please enter a valid age and name (non-empty value)'
@@ -31,7 +27,7 @@ const AddUser = (props) => {
             return;
         }
 
-        if (age < 0) {
+        if (enteredAge < 0) {
             setError({
                 title: 'Invalid input',
                 message: 'Please enter a valid age greater than 0'
@@ -41,21 +37,21 @@ const AddUser = (props) => {
         }
 
         const user = {
-            username: username,
-            age: +age,
+            username: enteredName,
+            age: +enteredAge,
             id: Math.random().toString()
         }
-        setToDefault();
         props.onAddUser(user);
-    };
-
-    const setToDefault = () => {
-        setUsername('');
-        setAge('');
+        setToDefault();
     };
 
     const closeModal = () => {
         setError();
+    };
+
+    const setToDefault = () => {
+        nameInputRef.current.value = '';
+        ageInputRef.current.value = '';
     };
 
     return (
@@ -64,9 +60,17 @@ const AddUser = (props) => {
             <Card className={styles.input}>
                 <form onSubmit={formSubmitHandler}>
                     <label htmlFor="username">Username</label>
-                    <input id="username" type="text" value={username} onChange={usernameChangeHandler} />
+                    <input
+                        id="username"
+                        type="text"
+                        ref={nameInputRef}
+                    />
                     <label htmlFor="age">Age (Years)</label>
-                    <input id="age" type="number" value={age} onChange={ageChangeHandler} />
+                    <input
+                        id="age"
+                        type="number"
+                        ref={ageInputRef}
+                    />
                     <Button type="submit">Add User</Button>
                 </form>
             </Card>

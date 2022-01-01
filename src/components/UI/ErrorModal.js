@@ -26,8 +26,6 @@ const ErrorModal = (props) => {
         );
     };
 
-
-
     return (
         <React.Fragment>
             {ReactDOM.createPortal(
